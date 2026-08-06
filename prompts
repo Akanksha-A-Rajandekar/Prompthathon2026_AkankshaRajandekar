@@ -1,1 +1,315 @@
+You are a Senior Full Stack Engineer, AI Architect, Product Designer, and Prompt Engineer.
 
+I am building an Agentic AI healthcare application called **MediGuide AI** for PROMPT-A-THON 2026.
+
+This project has already been partially completed.
+
+IMPORTANT:
+
+First inspect the existing project and understand the entire codebase before making any modifications.
+
+Preserve all existing pages, components, styling, authentication, routing, database configuration, and UI.
+
+Do NOT regenerate the landing page, login page, dashboard, navigation, or any existing UI unless required to fix bugs.
+
+If there are runtime errors, hydration errors, TypeScript errors, broken imports, or build issues, fix them first while preserving the design.
+
+The objective is to CONTINUE the project, not recreate it.
+
+====================================================
+PROJECT OVERVIEW
+====================================================
+
+Application Name
+
+MediGuide AI
+
+Purpose
+
+An intelligent multi-agent healthcare assistant that guides users based on symptoms, asks follow-up questions, remembers previous consultations, assesses urgency, summarizes the case, and provides safe educational recommendations.
+
+The application should look like a premium SaaS healthcare product.
+
+====================================================
+TECH STACK
+====================================================
+
+Next.js 15 (App Router)
+
+TypeScript
+
+TailwindCSS
+
+shadcn/ui
+
+Supabase
+
+Supabase Authentication
+
+Supabase PostgreSQL
+
+OpenAI GPT-4.1
+
+Fallback OpenRouter
+
+Lucide Icons
+
+Recharts
+
+Framer Motion
+
+Vercel Deployment
+
+====================================================
+CURRENTLY IMPLEMENTED
+====================================================
+
+The following already exist and should be preserved:
+
+• Landing Page
+• Authentication
+• Login
+• Register
+• Dashboard
+• Sidebar
+• Navigation
+• Profile
+• Basic Consultation Page UI
+• Timeline Page UI
+• Reports Page UI
+• Theme
+• Database connection (if already configured)
+
+Do not replace these.
+
+Only improve or extend them.
+
+====================================================
+STEP 1
+PROJECT AUDIT
+====================================================
+
+Inspect the complete project.
+
+Fix
+
+Hydration errors
+
+Nested Link issues
+
+Incorrect Next.js Link usage
+
+Broken imports
+
+Missing use client
+
+Browser APIs during SSR
+
+TypeScript errors
+
+Build errors
+
+Runtime errors
+
+Console warnings
+
+Dependency issues
+
+Ensure the application builds successfully.
+
+====================================================
+STEP 2
+CREATE AGENTIC AI SYSTEM
+====================================================
+
+Implement a modular AI orchestration layer.
+
+Do NOT expose chain-of-thought.
+
+Create logical AI agents.
+
+Each agent has
+
+Name
+
+Role
+
+System Prompt
+
+Input
+
+Output
+
+The agents are
+
+1. Symptom Intake Agent
+2. Follow-up Question Agent
+3. Medical Knowledge Agent
+4. Risk Assessment Agent
+5. Case Summary Agent
+6. Recommendation Agent
+7. Memory Agent
+
+Create one orchestrator that runs these agents sequentially.
+
+Workflow
+
+User
+
+↓
+
+Symptom Intake
+
+↓
+
+Follow-up Questions
+
+↓
+
+Medical Knowledge
+
+↓
+
+Risk Assessment
+
+↓
+
+Case Summary
+
+↓
+
+Recommendation
+
+↓
+
+Memory
+
+↓
+
+Final Report
+
+Agents should communicate using structured JSON.
+
+====================================================
+CHAT EXPERIENCE
+====================================================
+
+Replace the placeholder consultation page with a professional ChatGPT-like interface.
+
+Features
+
+Streaming responses
+
+Typing animation
+
+Auto-scroll
+
+Markdown rendering
+
+Conversation history
+
+Message timestamps
+
+Responsive layout
+
+Medical theme
+
+====================================================
+FOLLOW-UP QUESTIONS
+====================================================
+
+The AI must behave like a medical intake assistant.
+
+Never diagnose immediately.
+
+Collect sufficient information.
+
+Ask exactly ONE question at a time.
+
+The next question must depend on previous answers.
+
+Examples
+
+Headache
+
+↓
+
+Duration
+
+↓
+
+Location
+
+↓
+
+Pain Scale
+
+↓
+
+Fever
+
+↓
+
+Vision Changes
+
+↓
+
+Medical History
+
+↓
+
+Current Medication
+
+Stop asking questions once confidence is sufficient.
+
+====================================================
+CASE SUMMARY
+====================================================
+
+Generate a structured report.
+
+Include
+
+Chief Complaint
+
+Symptoms
+
+Duration
+
+Severity
+
+Associated Symptoms
+
+Medical History
+
+Possible Conditions
+
+Confidence Score
+
+Risk Level
+
+Recommended Action
+
+Self-Care Advice
+
+Doctor Recommendation
+
+Disclaimer
+
+Display this in a professional card.
+
+====================================================
+RISK ASSESSMENT
+====================================================
+
+Risk Levels
+
+Green
+
+Low
+
+Yellow
+
+Moderate
+
+...
