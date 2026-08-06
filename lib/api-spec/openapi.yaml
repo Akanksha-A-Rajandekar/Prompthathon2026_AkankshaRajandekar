@@ -10,6 +10,14 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: dashboard
+    description: Dashboard and insight operations
+  - name: consultations
+    description: Symptom intake consultations
+  - name: workflow
+    description: Agent workflow operations
+  - name: reports
+    description: Consultation reports
 paths:
   /healthz:
     get:
@@ -24,7 +32,124 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get dashboard summary
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+  /consultations:
+    get:
+      operationId: listConsultations
+      tags: [consultations]
+      summary: List consultations
+      responses:
+        "200":
+          description: Consultation history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Consultation"
+    post:
+      operationId: createConsultation
+      tags: [consultations]
+      summary: Start a consultation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConsultationInput"
+      responses:
+        "201":
+          description: Consultation created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConsultationDetail"
+  /consultations/{id}:
+    get:
+      operationId: getConsultation
+      tags: [consultations]
+      summary: Get a consultation
+      parameters:
+        - $ref: "#/components/parameters/ConsultationId"
+      responses:
+        "200":
+          description: Consultation detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConsultationDetail"
+        "404":
+          description: Consultation not found
+    post:
+      operationId: answerConsultation
+      tags: [consultations]
+      summary: Answer the next intake question
+      parameters:
+        - $ref: "#/components/parameters/ConsultationId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConsultationAnswerInput"
+      responses:
+        "200":
+          description: Updated consultation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConsultationDetail"
+        "404":
+          description: Consultation not found
+  /workflow/agents:
+    get:
+      operationId: listWorkflowAgents
+      tags: [workflow]
+      summary: List AI workflow agents
+      responses:
+        "200":
+          description: Agent definitions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorkflowAgent"
+  /reports/{id}:
+    get:
+      operationId: getReport
+      tags: [reports]
+      summary: Get a consultation report
+      parameters:
+        - $ref: "#/components/parameters/ConsultationId"
+      responses:
+        "200":
+          description: Consultation report
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Report"
+        "404":
+          description: Report not found
 components:
+  parameters:
+    ConsultationId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
   schemas:
     HealthStatus:
       type: object
@@ -33,4 +158,200 @@ components:
           type: string
       required:
         - status
+    ConsultationInput:
+      type: object
+      properties:
+        message:
+          type: string
+          minLength: 1
+      required: [message]
+    ConsultationAnswerInput:
+      type: object
+      properties:
+        answer:
+          type: string
+          minLength: 1
+      required: [answer]
+    Consultation:
+      type: object
+      properties:
+        id:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        title:
+          type: string
+        symptomPreview:
+          type: string
+        riskLevel:
+          type: string
+          enum: [green, yellow, orange, red]
+        riskLabel:
+          type: string
+        status:
+          type: string
+          enum: [in_progress, complete, emergency]
+        progress:
+          type: number
+        nextQuestion:
+          type: ["string", "null"]
+      required:
+        - id
+        - createdAt
+        - updatedAt
+        - title
+        - symptomPreview
+        - riskLevel
+        - riskLabel
+        - status
+        - progress
+        - nextQuestion
+    ConsultationMessage:
+      type: object
+      properties:
+        id:
+          type: string
+        role:
+          type: string
+          enum: [assistant, user, system]
+        content:
+          type: string
+        timestamp:
+          type: string
+      required: [id, role, content, timestamp]
+    ConsultationDetail:
+      allOf:
+        - $ref: "#/components/schemas/Consultation"
+        - type: object
+          properties:
+            messages:
+              type: array
+              items:
+                $ref: "#/components/schemas/ConsultationMessage"
+            summary:
+              oneOf:
+                - $ref: "#/components/schemas/CaseSummary"
+                - type: "null"
+          required: [messages, summary]
+    CaseSummary:
+      type: object
+      properties:
+        chiefComplaint:
+          type: string
+        symptoms:
+          type: array
+          items:
+            type: string
+        duration:
+          type: string
+        severity:
+          type: string
+        associatedSymptoms:
+          type: array
+          items:
+            type: string
+        medicalHistory:
+          type: string
+        possibleConditions:
+          type: array
+          items:
+            type: string
+        confidenceScore:
+          type: number
+        riskLevel:
+          type: string
+          enum: [green, yellow, orange, red]
+        riskReason:
+          type: string
+        recommendedAction:
+          type: string
+        selfCareAdvice:
+          type: array
+          items:
+            type: string
+        doctorRecommendation:
+          type: string
+        disclaimer:
+          type: string
+      required:
+        - chiefComplaint
+        - symptoms
+        - duration
+        - severity
+        - associatedSymptoms
+        - medicalHistory
+        - possibleConditions
+        - confidenceScore
+        - riskLevel
+        - riskReason
+        - recommendedAction
+        - selfCareAdvice
+        - doctorRecommendation
+        - disclaimer
+    DashboardSummary:
+      type: object
+      properties:
+        totalConsultations:
+          type: number
+        completedConsultations:
+          type: number
+        latestConsultation:
+          oneOf:
+            - $ref: "#/components/schemas/Consultation"
+            - type: "null"
+        averageRisk:
+          type: string
+        recentReports:
+          type: array
+          items:
+            $ref: "#/components/schemas/Consultation"
+        riskBreakdown:
+          type: object
+          properties:
+            green:
+              type: number
+            yellow:
+              type: number
+            orange:
+              type: number
+            red:
+              type: number
+          required: [green, yellow, orange, red]
+      required:
+        - totalConsultations
+        - completedConsultations
+        - latestConsultation
+        - averageRisk
+        - recentReports
+        - riskBreakdown
+    WorkflowAgent:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+        description:
+          type: string
+        input:
+          type: string
+        output:
+          type: string
+        order:
+          type: number
+      required: [id, name, role, description, input, output, order]
+    Report:
+      type: object
+      properties:
+        consultation:
+          $ref: "#/components/schemas/Consultation"
+        summary:
+          $ref: "#/components/schemas/CaseSummary"
+        generatedAt:
+          type: string
+      required: [consultation, summary, generatedAt]
 

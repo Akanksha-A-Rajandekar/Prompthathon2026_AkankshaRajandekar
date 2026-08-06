@@ -1,0 +1,1 @@
+- [MediGuide safety model](mediguide-safety.md) — keep urgency detection transparent and educational; never expose chain-of-thought or imply diagnosis.

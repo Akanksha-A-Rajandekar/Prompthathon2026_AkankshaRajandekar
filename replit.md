@@ -1,6 +1,6 @@
-# [Project name]
+# MediGuide AI
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+MediGuide AI is a calm healthcare companion that guides users through symptom intake, explains urgency, creates consultation summaries, and keeps a private health timeline.
 
 ## Run & Operate
 
@@ -22,23 +22,37 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/mediguide-ai/` — React + Vite user experience with dashboard, consultation, timeline, reports, and workflow routes
+- `artifacts/api-server/` — Express API for consultation intake, summaries, reports, dashboard aggregates, and workflow agents
+- `lib/api-spec/openapi.yaml` — source of truth for the typed API contract
+- `lib/db/src/schema/consultations.ts` — persisted consultation and message record
+- `artifacts/api-server/src/lib/mediguide.ts` — modular intake, risk detection, summary, and workflow logic
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- API contracts are defined in OpenAPI first and generated into the shared React client and Zod validators.
+- Consultations are stored as a single record with JSON message and summary fields so the complete user-facing case stays together.
+- The first implementation uses transparent, deterministic intake and emergency-signal rules so the experience remains safe and testable without exposing model reasoning.
+- Risk levels are explicit (`green`, `yellow`, `orange`, `red`) and every non-green outcome includes a plain-language reason.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- Dashboard overview with consultation counts, recent reports, average risk, and risk breakdown
+- Guided consultation chat that asks one follow-up question at a time
+- Emergency signal detection that pauses normal intake and recommends immediate care
+- Structured case summaries with confidence, possible educational context, next steps, and disclaimer
+- Consultation timeline with reopen support and report views
+- Judge-facing AI workflow page describing all seven agents from intake through memory
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+The uploaded brief asked to preserve an existing MediGuide product direction and make the result feel like a premium healthcare SaaS product.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Run `pnpm --filter @workspace/api-spec run codegen` after changing `lib/api-spec/openapi.yaml`.
+- Run `pnpm run typecheck:libs` before checking the API server when shared schemas change.
+- The app intentionally states that it is educational guidance, not a diagnosis or substitute for professional care.
 
 ## Pointers
 

@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "MediGuide AI"
+description = "A premium healthcare companion that guides users through symptom intake, explains risk levels, creates consultation summaries, and keeps a private health timeline."
+version = "1.0.0"
+id = "artifacts/mediguide-ai"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22041
+
+[services.development]
+run = "pnpm --filter @workspace/mediguide-ai run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/mediguide-ai", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/mediguide-ai/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22041"
+BASE_PATH = "/"
