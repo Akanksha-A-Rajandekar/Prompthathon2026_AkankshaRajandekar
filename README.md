@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # MediGuide AI
 
 MediGuide AI is an agentic healthcare companion that guides users through symptom intake, asks focused follow-up questions, explains urgency, creates an educational case summary, and keeps a private consultation timeline.
@@ -40,3 +41,6 @@ MediGuide AI provides educational guidance only. It is not a diagnosis or a subs
 - `docs/AI_ARCHITECTURE.md` — system architecture and agent contract
 - `docs/PROMPTS.md` — prompts and prompt templates used for the assistant
 - `attached_assets/Pasted-You-are-a-Senior-Full-Stack-Engineer-AI-Architect-Produ_1786009357501.txt` — original project brief
+=======
+# Prompthathon2026_AkankshaRajandekar
+>>>>>>> origin/main
